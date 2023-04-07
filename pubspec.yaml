@@ -1,0 +1,21 @@
+name: var_dump
+description: Dumps details in tree from variable. Optionally exits.
+version: 0.0.1
+repository: https://github.com/insign/dart_var_dump
+homepage: https://github.com/insign/dart_var_dump
+
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+# Explicitly declare that this package works on all desktop platforms.
+platforms:
+  linux:
+  macos:
+  windows:
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
+dependencies:
+  all_exit_codes: ^2.1.0
