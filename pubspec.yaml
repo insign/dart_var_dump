@@ -1,6 +1,6 @@
 name: var_dump
 description: Dumps details in tree from variable. Optionally exits.
-version: 0.4.1
+version: 0.4.2
 repository: https://github.com/insign/dart_var_dump
 homepage: https://github.com/insign/dart_var_dump
 

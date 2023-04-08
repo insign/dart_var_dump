@@ -1,3 +1,5 @@
+## v0.4.2
+- better score
 ## v0.4.1
 - edit readme
 ## v0.4.0

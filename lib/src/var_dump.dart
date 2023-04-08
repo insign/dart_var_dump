@@ -15,6 +15,16 @@ void dump(dynamic obj, {bool colorize = true}) {
   print(analyse(obj, colorize: colorize));
 }
 
+/// Dump the variable to the console
+/// Alias for [dump]
+/// Parameters:
+/// - [obj]: The variable to dump
+/// - [colorize]: Whether to colorize the output
+// ignore: non_constant_identifier_names
+void var_dump(dynamic obj, {bool colorize = true}) {
+  dump(obj, colorize: colorize);
+}
+
 /// Dump the variable to the console and exit with success
 ///
 /// Parameters:
