@@ -1,6 +1,4 @@
-import 'package:all_exit_codes/all_exit_codes.dart';
 import 'package:test/test.dart';
-import 'package:var_dump/src/colors.dart';
 import 'package:var_dump/var_dump.dart';
 
 void main() {

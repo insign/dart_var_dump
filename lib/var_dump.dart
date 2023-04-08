@@ -4,3 +4,5 @@
 library var_dump;
 
 export 'src/var_dump.dart';
+
+part 'src/colors.dart';

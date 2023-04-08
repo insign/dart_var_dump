@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:all_exit_codes/all_exit_codes.dart';
 import 'dart:mirrors';
-import 'package:var_dump/src/colors.dart';
+import 'package:var_dump/var_dump.dart';
 
 int level = 0;
 

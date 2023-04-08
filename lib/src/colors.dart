@@ -1,3 +1,5 @@
+part of var_dump;
+
 const reset = '\u001b[0m';
 const blue = '\u001b[38;5;45m';
 const green = '\u001b[38;5;46m';
