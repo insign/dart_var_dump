@@ -1,18 +1,31 @@
-Just terminal exit codes with more description to use in dart
+Dumps details in tree from variable. Optionally exits.
 
 ## Getting started
 
 ```dart
-dart pub add all_exit_codes
+dart pub add dev:var_dump
 ```
 ## Usage
 
 ```dart
-import 'package:all_exit_codes/all_exit_codes.dart';
+import 'package:var_dump/var_dump.dart';
 
-Never main() {
-  print('Maybe you are using this command wrong. Check the usage.');
-  exit(wrongUsage);
+void main(List<String> args) async {
+  Map<String, dynamic> objects = {
+    'string': 'Josh',
+    'int': 10,
+    'double': 1.0,
+    'bool': true,
+    'list': [1, 2, 3],
+    'map': {'key': 'value'},
+    'function': () {},
+    'symbol': #symbol,
+    'type': int,
+    'uri': Uri.parse('https://example.com'),
+    'null': null
+  };
+
+  dd(objects);
 }
 ```
 
