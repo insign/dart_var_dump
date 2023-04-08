@@ -72,7 +72,7 @@ String analyse(dynamic obj, {bool colorize = true}) {
   }
 
   if (obj is Map) {
-    out += '$objColor${obj.runtimeType}$noColor {\n';
+    out += '$mapColor${obj.runtimeType}$noColor {\n';
     level++;
     obj.forEach((key, value) {
       out += '  ' * level;
@@ -85,7 +85,7 @@ String analyse(dynamic obj, {bool colorize = true}) {
   }
 
   if (obj is List) {
-    out += '$objColor${obj.runtimeType}$noColor [\n';
+    out += '$listColor${obj.runtimeType}$noColor [\n';
     level++;
     for (var value in obj) {
       out += '  ' * level;
@@ -98,7 +98,7 @@ String analyse(dynamic obj, {bool colorize = true}) {
   }
 
   if (obj is Set) {
-    out += '$objColor${obj.runtimeType}$noColor {\n';
+    out += '$setColor${obj.runtimeType}$noColor {\n';
     level++;
     for (var value in obj) {
       out += '  ' * level;

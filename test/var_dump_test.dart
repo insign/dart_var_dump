@@ -14,7 +14,7 @@ void main() {
   group('analyse()', () {
     test('should return a string representation of the variable', () {
       final dynamic obj = {'name': 'John', 'age': 30};
-      final String expected = '\x1B[38;5;28m_Map<String, Object>\x1B[0m {\n'
+      final String expected = '\x1B[38;5;87m_Map<String, Object>\x1B[0m {\n'
           '  \x1B[38;5;197mname\x1B[0m: "\x1B[38;5;136mJohn\x1B[0m"\n'
           '  \x1B[38;5;197mage\x1B[0m: \x1B[38;5;124m\x1B[1m30\x1B[0m\n'
           '}\x1B[0m';
