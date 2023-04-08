@@ -1,3 +1,5 @@
+## v0.5.0
+- now prints to stderr
 ## v0.4.3
 - better score
 ## v0.4.2

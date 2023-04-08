@@ -2,7 +2,7 @@
 const name = 'var_dump';
 const description =
     'Dumps details in tree from variable. Optionally exits. Can use dump() or var_dump(), or dd() for "dump and die"';
-const version = '0.4.3';
+const version = '0.5.0';
 const repository = 'https://github.com/insign/dart_var_dump';
 const homepage = 'https://github.com/insign/dart_var_dump';
 const environment = '{sdk: >=2.17.0 <3.0.0}';

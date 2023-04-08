@@ -12,7 +12,8 @@ int level = 0;
 /// - [obj]: The variable to dump
 /// - [colorize]: Whether to colorize the output
 void dump(dynamic obj, {bool colorize = true}) {
-  print(analyse(obj, colorize: colorize));
+  // prints to stderr to avoid messing up stdout
+  stderr.writeln(analyse(obj, colorize: colorize));
 }
 
 /// Dump the variable to the console
