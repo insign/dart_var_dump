@@ -1,6 +1,3 @@
-/// Colors for the output of var_dump
-part of var_dump;
-
 /// ANSI escape code for resetting the color
 const reset = '\u001b[0m';
 
