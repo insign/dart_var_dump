@@ -1,3 +1,5 @@
+## v0.6.0
+- refactor: improvements
 ## v0.5.0
 - now prints to stderr
 ## v0.4.3

@@ -18,7 +18,7 @@ void main() {
       final list = [
         1,
         ['a', 'b', 'c'],
-        true
+        true,
       ];
       final expected = 'List<Object> [\n  1\n  List<String> [\n    "a"\n    "b"\n    "c"\n  ]\n  true\n]';
       expect(dumper.dump(list), equals(expected));
@@ -29,9 +29,10 @@ void main() {
       final map = {
         'a': 1,
         'b': {'x': 10, 'y': 20},
-        'c': true
+        'c': true,
       };
-      final expected = 'Map<String, Object> {\n  a: 1\n  b: Map<String, int> {\n    x: 10\n    y: 20\n  }\n  c: true\n}';
+      final expected =
+          'Map<String, Object> {\n  a: 1\n  b: Map<String, int> {\n    x: 10\n    y: 20\n  }\n  c: true\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
@@ -39,9 +40,10 @@ void main() {
       final dumper = Dumper(colorize: false);
       final list = [
         {'a': 1},
-        {'b': 2}
+        {'b': 2},
       ];
-      final expected = 'List<Map<String, int>> [\n  Map<String, int> {\n    a: 1\n  }\n  Map<String, int> {\n    b: 2\n  }\n]';
+      final expected =
+          'List<Map<String, int>> [\n  Map<String, int> {\n    a: 1\n  }\n  Map<String, int> {\n    b: 2\n  }\n]';
       expect(dumper.dump(list), equals(expected));
     });
 
@@ -49,9 +51,10 @@ void main() {
       final dumper = Dumper(colorize: false);
       final map = {
         'a': [1, 2, 3],
-        'b': [4, 5, 6]
+        'b': [4, 5, 6],
       };
-      final expected = 'Map<String, List<int>> {\n  a: List<int> [\n    1\n    2\n    3\n  ]\n  b: List<int> [\n    4\n    5\n    6\n  ]\n}';
+      final expected =
+          'Map<String, List<int>> {\n  a: List<int> [\n    1\n    2\n    3\n  ]\n  b: List<int> [\n    4\n    5\n    6\n  ]\n}';
       expect(dumper.dump(map), equals(expected));
     });
   });
@@ -97,10 +100,7 @@ class _TestClassWithToJson {
   final int a;
   final String b;
 
-  Map<String, dynamic> toJson() => {
-        'a': a,
-        'b': b,
-      };
+  Map<String, dynamic> toJson() => {'a': a, 'b': b};
 }
 
 class _TestClassWithoutToJson {

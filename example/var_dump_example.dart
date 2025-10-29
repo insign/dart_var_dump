@@ -12,7 +12,7 @@ void main(List<String> args) async {
     'symbol': #symbol,
     'type': int,
     'uri': Uri.parse('https://example.com'),
-    'null': null
+    'null': null,
   };
 
   dd(allObjects);

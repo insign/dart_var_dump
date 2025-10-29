@@ -1,9 +1,7 @@
 import 'package:var_dump/src/colors.dart';
 
 class Dumper {
-  Dumper({
-    this.colorize = true,
-  });
+  Dumper({this.colorize = true});
 
   final bool colorize;
   int _level = 0;
@@ -34,7 +32,9 @@ class Dumper {
     final String enumColor = colorize ? lightYellow : '';
 
     if (obj == null) {
-      return '$nullColor' 'null' '$noColor';
+      return '$nullColor'
+          'null'
+          '$noColor';
     }
 
     if (obj is String) {
