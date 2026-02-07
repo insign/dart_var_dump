@@ -91,7 +91,32 @@ void main() {
       final expected = 'Map<String, dynamic> {\n  a: 1\n  b: 2\n  c: *RECURSION*\n}';
       expect(dumper.dump(map), equals(expected));
     });
+
+    test('should NOT handle distinct objects as circular references', () {
+      final dumper = Dumper(colorize: false);
+      final child = _TestNode(1);
+      final parent = _TestNode(1, child);
+      final expected = 'TestNode {\n  "id": 1\n  "child": TestNode {\n    "id": 1\n    "child": null\n  }\n}';
+      expect(dumper.dump(parent), equals(expected));
+    });
   });
+}
+
+class _TestNode {
+  final int id;
+  final _TestNode? child;
+  _TestNode(this.id, [this.child]);
+
+  @override
+  bool operator ==(Object other) => other is _TestNode && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'child': child,
+      };
 }
 
 class _TestClassWithToJson {
