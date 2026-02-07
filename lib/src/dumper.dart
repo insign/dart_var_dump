@@ -5,7 +5,7 @@ class Dumper {
 
   final bool colorize;
   int _level = 0;
-  final _visited = <dynamic>{};
+  final _visited = Set<dynamic>.identity();
 
   String dump(dynamic obj) {
     if (obj != null && _visited.contains(obj)) {
