@@ -37,116 +37,119 @@ class Dumper {
           '$noColor';
     }
 
-    if (obj is String) {
-      out = '"$strColor$obj$noColor"';
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is num) {
-      out = '$numberColor$obj$noColor';
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is bool) {
-      out = '$boolColor$obj$noColor';
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is Enum) {
-      out = '$enumColor${obj.toString()}$noColor (enum)';
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is Map) {
-      out += '$mapColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
-      _level++;
-      obj.forEach((key, value) {
-        out += '  ' * _level;
-        out += '$keyColor$key$noColor: ${dump(value)}\n';
-      });
-      out += '  ' * (_level - 1);
-      out += '}';
-      _level--;
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is List) {
-      out += '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n';
-      _level++;
-      for (var value in obj) {
-        out += '  ' * _level;
-        out += '${dump(value)}\n';
+    try {
+      if (obj is String) {
+        out = '"$strColor$obj$noColor"';
+        return out;
       }
-      out += '  ' * (_level - 1);
-      out += ']';
-      _level--;
-      _visited.remove(obj);
-      return out;
-    }
 
-    if (obj is Set) {
-      out += '$setColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
-      _level++;
-      for (var value in obj) {
-        out += '  ' * _level;
-        out += '${dump(value)}\n';
+      if (obj is num) {
+        out = '$numberColor$obj$noColor';
+        return out;
       }
-      out += '  ' * (_level - 1);
-      out += '}';
-      _level--;
-      _visited.remove(obj);
-      return out;
-    }
 
-    if (obj is Function) {
-      out = '$funcColor${obj.runtimeType}$noColor';
-      _visited.remove(obj);
-      return out;
-    }
+      if (obj is bool) {
+        out = '$boolColor$obj$noColor';
+        return out;
+      }
 
-    if (obj is Symbol) {
-      out = '$objColor$obj$noColor ';
-      _visited.remove(obj);
-      return out;
-    }
+      if (obj is Enum) {
+        out = '$enumColor${obj.toString()}$noColor (enum)';
+        return out;
+      }
 
-    if (obj is Uri) {
-      out = '$linkColor$obj$noColor';
-      _visited.remove(obj);
-      return out;
-    }
-
-    if (obj is Object && obj is! Type) {
-      out += '$objColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
-      _level++;
-      try {
-        final Map<String, dynamic> json = (obj as dynamic).toJson();
-        json.forEach((key, value) {
+      if (obj is Map) {
+        out +=
+            '$mapColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+        _level++;
+        obj.forEach((key, value) {
           out += '  ' * _level;
-          out += '$keyColor"$key"$noColor: ${dump(value)}\n';
+          out += '$keyColor$key$noColor: ${dump(value)}\n';
         });
-      } catch (e) {
-        out += '  ' * _level + '${obj.toString()}\n';
+        out += '  ' * (_level - 1);
+        out += '}';
+        _level--;
+        return out;
       }
-      out += '  ' * (_level - 1);
-      out += '}';
-      _level--;
-      _visited.remove(obj);
-      return out;
-    }
 
-    if (obj is Type) {
-      out = '($objColor$obj$noColor)';
-      _visited.remove(obj);
-      return out;
-    }
+      if (obj is List) {
+        out +=
+            '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n';
+        _level++;
+        for (var value in obj) {
+          out += '  ' * _level;
+          out += '${dump(value)}\n';
+        }
+        out += '  ' * (_level - 1);
+        out += ']';
+        _level--;
+        return out;
+      }
 
-    _visited.remove(obj);
-    return "***$out***";
+      if (obj is Set) {
+        out +=
+            '$setColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+        _level++;
+        for (var value in obj) {
+          out += '  ' * _level;
+          out += '${dump(value)}\n';
+        }
+        out += '  ' * (_level - 1);
+        out += '}';
+        _level--;
+        return out;
+      }
+
+      if (obj is Function) {
+        out = '$funcColor${obj.runtimeType}$noColor';
+        return out;
+      }
+
+      if (obj is Symbol) {
+        out = '$objColor$obj$noColor ';
+        return out;
+      }
+
+      if (obj is Uri) {
+        out = '$linkColor$obj$noColor';
+        return out;
+      }
+
+      if (obj is Object && obj is! Type) {
+        Map<String, dynamic>? json;
+        try {
+          json = (obj as dynamic).toJson();
+        } catch (e) {
+          // ignore
+        }
+
+        if (json != null) {
+          out +=
+              '$objColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+          _level++;
+          json.forEach((key, value) {
+            out += '  ' * _level;
+            out += '$keyColor"$key"$noColor: ${dump(value)}\n';
+          });
+          out += '  ' * (_level - 1);
+          out += '}';
+          _level--;
+        } else {
+          out = '$objColor${obj.toString()}$noColor';
+        }
+        return out;
+      }
+
+      if (obj is Type) {
+        out = '($objColor$obj$noColor)';
+        return out;
+      }
+
+      return "***$out***";
+    } finally {
+      if (obj != null) {
+        _visited.remove(obj);
+      }
+    }
   }
 }

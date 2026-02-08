@@ -70,7 +70,7 @@ void main() {
     test('should dump an object without a toJson method', () {
       final dumper = Dumper(colorize: false);
       final obj = _TestClassWithoutToJson(1, 'two');
-      final expected = 'TestClassWithoutToJson {\n  Instance of \'_TestClassWithoutToJson\'\n}';
+      final expected = 'Instance of \'_TestClassWithoutToJson\'';
       expect(dumper.dump(obj), equals(expected));
     });
   });
