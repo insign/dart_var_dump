@@ -1,3 +1,7 @@
+## v0.7.0
+- fix: Use Set.identity() for recursion detection in Dumper
+- refactor: Use try-finally for recursion safety and cleaner output for non-JSON objects
+
 ## v0.6.0
 - refactor: improvements
 ## v0.5.0
