@@ -31,7 +31,7 @@ void main() {
     test('should dump a list', () {
       final dumper = Dumper(colorize: false);
       final list = [1, 'two', true];
-      final expected = 'List<Object> [\n  1\n  "two"\n  true\n]';
+      final expected = 'List<Object> [\n  0: 1\n  1: "two"\n  2: true\n]';
       expect(dumper.dump(list), equals(expected));
     });
 

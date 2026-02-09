@@ -20,7 +20,8 @@ void main() {
         ['a', 'b', 'c'],
         true,
       ];
-      final expected = 'List<Object> [\n  1\n  List<String> [\n    "a"\n    "b"\n    "c"\n  ]\n  true\n]';
+      final expected =
+          'List<Object> [\n  0: 1\n  1: List<String> [\n    0: "a"\n    1: "b"\n    2: "c"\n  ]\n  2: true\n]';
       expect(dumper.dump(list), equals(expected));
     });
 
@@ -43,7 +44,7 @@ void main() {
         {'b': 2},
       ];
       final expected =
-          'List<Map<String, int>> [\n  Map<String, int> {\n    a: 1\n  }\n  Map<String, int> {\n    b: 2\n  }\n]';
+          'List<Map<String, int>> [\n  0: Map<String, int> {\n    a: 1\n  }\n  1: Map<String, int> {\n    b: 2\n  }\n]';
       expect(dumper.dump(list), equals(expected));
     });
 
@@ -54,7 +55,7 @@ void main() {
         'b': [4, 5, 6],
       };
       final expected =
-          'Map<String, List<int>> {\n  a: List<int> [\n    1\n    2\n    3\n  ]\n  b: List<int> [\n    4\n    5\n    6\n  ]\n}';
+          'Map<String, List<int>> {\n  a: List<int> [\n    0: 1\n    1: 2\n    2: 3\n  ]\n  b: List<int> [\n    0: 4\n    1: 5\n    2: 6\n  ]\n}';
       expect(dumper.dump(map), equals(expected));
     });
   });
@@ -80,7 +81,8 @@ void main() {
       final dumper = Dumper(colorize: false);
       final list = <dynamic>[1, 2, 3];
       list.add(list);
-      final expected = 'List<dynamic> [\n  1\n  2\n  3\n  *RECURSION*\n]';
+      final expected =
+          'List<dynamic> [\n  0: 1\n  1: 2\n  2: 3\n  3: *RECURSION*\n]';
       expect(dumper.dump(list), equals(expected));
     });
 
