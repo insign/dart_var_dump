@@ -1,3 +1,6 @@
+## v0.8.0
+- feat: Add indices to List output for better readability
+
 ## v0.7.0
 - fix: Use Set.identity() for recursion detection in Dumper
 - refactor: Use try-finally for recursion safety and cleaner output for non-JSON objects
