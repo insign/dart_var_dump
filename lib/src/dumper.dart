@@ -7,112 +7,123 @@ class Dumper {
   int _level = 0;
   final _visited = Set<dynamic>.identity();
 
+  late final String _noColor = colorize ? reset : '';
+  late final String _keyColor = colorize ? pink : '';
+  late final String _strColor = colorize ? darkYellow : '';
+  late final String _boolColor = colorize ? yellow + italic + bold : '';
+  late final String _numberColor = colorize ? darkRed + bold : '';
+  late final String _nullColor = colorize ? orange + bold + italic : '';
+  late final String _objColor = colorize ? darkGreen : '';
+  late final String _linkColor = colorize ? lightBlue + underline : '';
+  late final String _funcColor = colorize ? blue : '';
+  late final String _listColor = colorize ? lightGreen : '';
+  late final String _setColor = colorize ? lightMagenta : '';
+  late final String _mapColor = colorize ? lightCyan : '';
+  late final String _enumColor = colorize ? lightYellow : '';
+
   String dump(dynamic obj) {
+    final buffer = StringBuffer();
+    _dump(obj, buffer);
+    return buffer.toString();
+  }
+
+  void _dump(dynamic obj, StringBuffer buffer) {
     if (obj != null && _visited.contains(obj)) {
-      return '*RECURSION*';
+      buffer.write('*RECURSION*');
+      return;
     }
     if (obj != null) {
       _visited.add(obj);
     }
 
-    String out = '';
-
-    final String noColor = colorize ? reset : '';
-    final String keyColor = colorize ? pink : '';
-    final String strColor = colorize ? darkYellow : '';
-    final String boolColor = colorize ? yellow + italic + bold : '';
-    final String numberColor = colorize ? darkRed + bold : '';
-    final String nullColor = colorize ? orange + bold + italic : '';
-    final String objColor = colorize ? darkGreen : '';
-    final String linkColor = colorize ? lightBlue + underline : '';
-    final String funcColor = colorize ? blue : '';
-    final String listColor = colorize ? lightGreen : '';
-    final String setColor = colorize ? lightMagenta : '';
-    final String mapColor = colorize ? lightCyan : '';
-    final String enumColor = colorize ? lightYellow : '';
-
     if (obj == null) {
-      return '$nullColor'
+      buffer.write('$_nullColor'
           'null'
-          '$noColor';
+          '$_noColor');
+      return;
     }
 
     try {
       if (obj is String) {
-        out = '"$strColor$obj$noColor"';
-        return out;
+        buffer.write('"$_strColor$obj$_noColor"');
+        return;
       }
 
       if (obj is num) {
-        out = '$numberColor$obj$noColor';
-        return out;
+        buffer.write('$_numberColor$obj$_noColor');
+        return;
       }
 
       if (obj is bool) {
-        out = '$boolColor$obj$noColor';
-        return out;
+        buffer.write('$_boolColor$obj$_noColor');
+        return;
       }
 
       if (obj is Enum) {
-        out = '$enumColor${obj.toString()}$noColor (enum)';
-        return out;
+        buffer.write('$_enumColor${obj.toString()}$_noColor (enum)');
+        return;
       }
 
       if (obj is Map) {
-        out +=
-            '$mapColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+        buffer.write(
+            '$_mapColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
         _level++;
         obj.forEach((key, value) {
-          out += '  ' * _level;
-          out += '$keyColor$key$noColor: ${dump(value)}\n';
+          buffer.write('  ' * _level);
+          buffer.write('$_keyColor$key$_noColor: ');
+          _dump(value, buffer);
+          buffer.write('\n');
         });
-        out += '  ' * (_level - 1);
-        out += '}';
+        buffer.write('  ' * (_level - 1));
+        buffer.write('}');
         _level--;
-        return out;
+        return;
       }
 
       if (obj is List) {
-        out +=
-            '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n';
+        buffer.write(
+            '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor [\n');
         _level++;
         for (var i = 0; i < obj.length; i++) {
-          out += '  ' * _level;
-          out += '$numberColor$i$noColor: ${dump(obj[i])}\n';
+          buffer.write('  ' * _level);
+          buffer.write('$_numberColor$i$_noColor: ');
+          _dump(obj[i], buffer);
+          buffer.write('\n');
         }
-        out += '  ' * (_level - 1);
-        out += ']';
+        buffer.write('  ' * (_level - 1));
+        buffer.write(']');
         _level--;
-        return out;
+        return;
       }
 
       if (obj is Set) {
-        out +=
-            '$setColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+        buffer.write(
+            '$_setColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
         _level++;
         for (var value in obj) {
-          out += '  ' * _level;
-          out += '${dump(value)}\n';
+          buffer.write('  ' * _level);
+          _dump(value, buffer);
+          buffer.write('\n');
         }
-        out += '  ' * (_level - 1);
-        out += '}';
+        buffer.write('  ' * (_level - 1));
+        buffer.write('}');
         _level--;
-        return out;
+        return;
       }
 
       if (obj is Function) {
-        out = '$funcColor${obj.runtimeType}$noColor';
-        return out;
+        buffer.write('$_funcColor${obj.runtimeType}$_noColor');
+        return;
       }
 
       if (obj is Symbol) {
-        out = '$objColor$obj$noColor ';
-        return out;
+        buffer.write('$_objColor$obj$_noColor ');
+        return;
       }
 
       if (obj is Uri) {
-        out = '$linkColor$obj$noColor';
-        return out;
+        buffer.write('$_linkColor$obj$_noColor');
+        return;
       }
 
       if (obj is Object && obj is! Type) {
@@ -124,28 +135,30 @@ class Dumper {
         }
 
         if (json != null) {
-          out +=
-              '$objColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+          buffer.write(
+              '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
           _level++;
           json.forEach((key, value) {
-            out += '  ' * _level;
-            out += '$keyColor"$key"$noColor: ${dump(value)}\n';
+            buffer.write('  ' * _level);
+            buffer.write('$_keyColor"$key"$_noColor: ');
+            _dump(value, buffer);
+            buffer.write('\n');
           });
-          out += '  ' * (_level - 1);
-          out += '}';
+          buffer.write('  ' * (_level - 1));
+          buffer.write('}');
           _level--;
         } else {
-          out = '$objColor${obj.toString()}$noColor';
+          buffer.write('$_objColor${obj.toString()}$_noColor');
         }
-        return out;
+        return;
       }
 
       if (obj is Type) {
-        out = '($objColor$obj$noColor)';
-        return out;
+        buffer.write('($_objColor$obj$_noColor)');
+        return;
       }
 
-      return "***$out***";
+      return;
     } finally {
       if (obj != null) {
         _visited.remove(obj);
