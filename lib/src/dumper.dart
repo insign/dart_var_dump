@@ -76,9 +76,9 @@ class Dumper {
         out +=
             '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n';
         _level++;
-        for (var value in obj) {
+        for (var i = 0; i < obj.length; i++) {
           out += '  ' * _level;
-          out += '${dump(value)}\n';
+          out += '$numberColor$i$noColor: ${dump(obj[i])}\n';
         }
         out += '  ' * (_level - 1);
         out += ']';
