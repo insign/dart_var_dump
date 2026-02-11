@@ -15,8 +15,6 @@ class Dumper {
       _visited.add(obj);
     }
 
-    String out = '';
-
     final String noColor = colorize ? reset : '';
     final String keyColor = colorize ? pink : '';
     final String strColor = colorize ? darkYellow : '';
@@ -39,83 +37,82 @@ class Dumper {
 
     try {
       if (obj is String) {
-        out = '"$strColor$obj$noColor"';
-        return out;
+        return '"$strColor$obj$noColor"';
       }
 
       if (obj is num) {
-        out = '$numberColor$obj$noColor';
-        return out;
+        return '$numberColor$obj$noColor';
       }
 
       if (obj is bool) {
-        out = '$boolColor$obj$noColor';
-        return out;
+        return '$boolColor$obj$noColor';
       }
 
       if (obj is Enum) {
-        out = '$enumColor${obj.toString()}$noColor (enum)';
-        return out;
-      }
-
-      if (obj is Map) {
-        out +=
-            '$mapColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
-        _level++;
-        obj.forEach((key, value) {
-          out += '  ' * _level;
-          out += '$keyColor$key$noColor: ${dump(value)}\n';
-        });
-        out += '  ' * (_level - 1);
-        out += '}';
-        _level--;
-        return out;
-      }
-
-      if (obj is List) {
-        out +=
-            '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n';
-        _level++;
-        for (var i = 0; i < obj.length; i++) {
-          out += '  ' * _level;
-          out += '$numberColor$i$noColor: ${dump(obj[i])}\n';
-        }
-        out += '  ' * (_level - 1);
-        out += ']';
-        _level--;
-        return out;
-      }
-
-      if (obj is Set) {
-        out +=
-            '$setColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
-        _level++;
-        for (var value in obj) {
-          out += '  ' * _level;
-          out += '${dump(value)}\n';
-        }
-        out += '  ' * (_level - 1);
-        out += '}';
-        _level--;
-        return out;
+        return '$enumColor${obj.toString()}$noColor (enum)';
       }
 
       if (obj is Function) {
-        out = '$funcColor${obj.runtimeType}$noColor';
-        return out;
+        return '$funcColor${obj.runtimeType}$noColor';
       }
 
       if (obj is Symbol) {
-        out = '$objColor$obj$noColor ';
-        return out;
+        return '$objColor$obj$noColor ';
       }
 
       if (obj is Uri) {
-        out = '$linkColor$obj$noColor';
-        return out;
+        return '$linkColor$obj$noColor';
       }
 
-      if (obj is Object && obj is! Type) {
+      if (obj is Type) {
+        return '($objColor$obj$noColor)';
+      }
+
+      final StringBuffer out = StringBuffer();
+
+      if (obj is Map) {
+        out.write(
+            '$mapColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n');
+        _level++;
+        obj.forEach((key, value) {
+          out.write('  ' * _level);
+          out.write('$keyColor$key$noColor: ${dump(value)}\n');
+        });
+        out.write('  ' * (_level - 1));
+        out.write('}');
+        _level--;
+        return out.toString();
+      }
+
+      if (obj is List) {
+        out.write(
+            '$listColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor [\n');
+        _level++;
+        for (var i = 0; i < obj.length; i++) {
+          out.write('  ' * _level);
+          out.write('$numberColor$i$noColor: ${dump(obj[i])}\n');
+        }
+        out.write('  ' * (_level - 1));
+        out.write(']');
+        _level--;
+        return out.toString();
+      }
+
+      if (obj is Set) {
+        out.write(
+            '$setColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n');
+        _level++;
+        for (var value in obj) {
+          out.write('  ' * _level);
+          out.write('${dump(value)}\n');
+        }
+        out.write('  ' * (_level - 1));
+        out.write('}');
+        _level--;
+        return out.toString();
+      }
+
+      if (obj is Object) {
         Map<String, dynamic>? json;
         try {
           json = (obj as dynamic).toJson();
@@ -124,28 +121,23 @@ class Dumper {
         }
 
         if (json != null) {
-          out +=
-              '$objColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n';
+          out.write(
+              '$objColor${obj.runtimeType.toString().replaceAll('_', '')}$noColor {\n');
           _level++;
           json.forEach((key, value) {
-            out += '  ' * _level;
-            out += '$keyColor"$key"$noColor: ${dump(value)}\n';
+            out.write('  ' * _level);
+            out.write('$keyColor"$key"$noColor: ${dump(value)}\n');
           });
-          out += '  ' * (_level - 1);
-          out += '}';
+          out.write('  ' * (_level - 1));
+          out.write('}');
           _level--;
+          return out.toString();
         } else {
-          out = '$objColor${obj.toString()}$noColor';
+          return '$objColor${obj.toString()}$noColor';
         }
-        return out;
       }
 
-      if (obj is Type) {
-        out = '($objColor$obj$noColor)';
-        return out;
-      }
-
-      return "***$out***";
+      return "***${out.toString()}***";
     } finally {
       if (obj != null) {
         _visited.remove(obj);
