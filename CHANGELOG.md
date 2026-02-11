@@ -1,3 +1,6 @@
+## v0.9.0
+- perf: Optimize Dumper with cached colors and StringBuffer for better performance
+
 ## v0.8.0
 - feat: Add indices to List output for better readability
 
