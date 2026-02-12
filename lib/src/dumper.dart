@@ -98,16 +98,21 @@ class Dumper {
         return out.toString();
       }
 
-      if (obj is Set) {
+      if (obj is Iterable) {
+        final isSet = obj is Set;
+        final start = isSet ? '{' : '(';
+        final end = isSet ? '}' : ')';
+        final color = isSet ? _setColor : _listColor;
+
         out.write(
-            '$_setColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
+            '$color${obj.runtimeType.toString().replaceAll('_', '')}$_noColor $start\n');
         _level++;
         for (var value in obj) {
           out.write('  ' * _level);
           out.write('${dump(value)}\n');
         }
         out.write('  ' * (_level - 1));
-        out.write('}');
+        out.write(end);
         _level--;
         return out.toString();
       }

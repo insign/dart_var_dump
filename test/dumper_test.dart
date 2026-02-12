@@ -41,5 +41,36 @@ void main() {
       final expected = 'Map<String, Object> {\n  a: 1\n  b: "two"\n  c: true\n}';
       expect(dumper.dump(map), equals(expected));
     });
+
+    test('should dump a set', () {
+      final dumper = Dumper(colorize: false);
+      final set = {1, 2, 3};
+      final expected = 'Set<int> {\n  1\n  2\n  3\n}';
+      expect(dumper.dump(set), equals(expected));
+    });
+
+    test('should dump a custom iterable', () {
+      final dumper = Dumper(colorize: false);
+      final iterable = MyIterable();
+      final expected = 'MyIterable (\n  1\n  2\n  3\n)';
+      expect(dumper.dump(iterable), equals(expected));
+    });
+
+    test('should dump map keys', () {
+      final dumper = Dumper(colorize: false);
+      final map = {'a': 1, 'b': 2};
+      final keys = map.keys;
+      final dump = dumper.dump(keys);
+      expect(dump, contains('Iterable'));
+      expect(dump, contains('('));
+      expect(dump, contains('  "a"'));
+      expect(dump, contains('  "b"'));
+      expect(dump, endsWith(')'));
+    });
   });
+}
+
+class MyIterable extends Iterable<int> {
+  @override
+  Iterator<int> get iterator => [1, 2, 3].iterator;
 }
