@@ -112,6 +112,20 @@ class Dumper {
         return out.toString();
       }
 
+      if (obj is Iterable) {
+        out.write(
+            '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor (\n');
+        _level++;
+        for (var value in obj) {
+          out.write('  ' * _level);
+          out.write('${dump(value)}\n');
+        }
+        out.write('  ' * (_level - 1));
+        out.write(')');
+        _level--;
+        return out.toString();
+      }
+
       if (obj is Object) {
         Map<String, dynamic>? json;
         try {

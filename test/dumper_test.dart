@@ -41,5 +41,12 @@ void main() {
       final expected = 'Map<String, Object> {\n  a: 1\n  b: "two"\n  c: true\n}';
       expect(dumper.dump(map), equals(expected));
     });
+
+    test('should dump a generic iterable', () {
+      final dumper = Dumper(colorize: false);
+      final iterable = [1, 2, 3].map((e) => e * 2);
+      final expected = 'MappedListIterable<int, int> (\n  2\n  4\n  6\n)';
+      expect(dumper.dump(iterable), equals(expected));
+    });
   });
 }
