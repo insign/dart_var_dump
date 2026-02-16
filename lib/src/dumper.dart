@@ -20,6 +20,7 @@ class Dumper {
   late final String _setColor = colorize ? lightMagenta : '';
   late final String _mapColor = colorize ? lightCyan : '';
   late final String _enumColor = colorize ? lightYellow : '';
+  late final String _iterColor = colorize ? purple : '';
 
   String dump(dynamic obj) {
     if (obj != null && _visited.contains(obj)) {
@@ -108,6 +109,20 @@ class Dumper {
         }
         out.write('  ' * (_level - 1));
         out.write('}');
+        _level--;
+        return out.toString();
+      }
+
+      if (obj is Iterable) {
+        out.write(
+            '$_iterColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor (\n');
+        _level++;
+        for (var value in obj) {
+          out.write('  ' * _level);
+          out.write('${dump(value)}\n');
+        }
+        out.write('  ' * (_level - 1));
+        out.write(')');
         _level--;
         return out.toString();
       }
