@@ -6,6 +6,7 @@ class Dumper {
   final bool colorize;
   int _level = 0;
   final _visited = Set<dynamic>.identity();
+  final StringBuffer _buffer = StringBuffer();
 
   late final String _noColor = colorize ? reset : '';
   late final String _keyColor = colorize ? pink : '';
@@ -22,108 +23,130 @@ class Dumper {
   late final String _enumColor = colorize ? lightYellow : '';
 
   String dump(dynamic obj) {
+    _buffer.clear();
+    _visited.clear();
+    _level = 0;
+    _dump(obj);
+    return _buffer.toString();
+  }
+
+  void _dump(dynamic obj) {
     if (obj != null && _visited.contains(obj)) {
-      return '*RECURSION*';
+      _buffer.write('*RECURSION*');
+      return;
     }
     if (obj != null) {
       _visited.add(obj);
     }
 
-    if (obj == null) {
-      return '$_nullColor'
-          'null'
-          '$_noColor';
-    }
-
     try {
+      if (obj == null) {
+        _buffer.write('$_nullColor'
+            'null'
+            '$_noColor');
+        return;
+      }
+
       if (obj is String) {
-        return '"$_strColor$obj$_noColor"';
+        _buffer.write('"$_strColor$obj$_noColor"');
+        return;
       }
 
       if (obj is num) {
-        return '$_numberColor$obj$_noColor';
+        _buffer.write('$_numberColor$obj$_noColor');
+        return;
       }
 
       if (obj is bool) {
-        return '$_boolColor$obj$_noColor';
+        _buffer.write('$_boolColor$obj$_noColor');
+        return;
       }
 
       if (obj is Enum) {
-        return '$_enumColor${obj.toString()}$_noColor (enum)';
+        _buffer.write('$_enumColor${obj.toString()}$_noColor (enum)');
+        return;
       }
 
       if (obj is Function) {
-        return '$_funcColor${obj.runtimeType}$_noColor';
+        _buffer.write('$_funcColor${obj.runtimeType}$_noColor');
+        return;
       }
 
       if (obj is Symbol) {
-        return '$_objColor$obj$_noColor ';
+        _buffer.write('$_objColor$obj$_noColor ');
+        return;
       }
 
       if (obj is Uri) {
-        return '$_linkColor$obj$_noColor';
+        _buffer.write('$_linkColor$obj$_noColor');
+        return;
       }
 
       if (obj is Type) {
-        return '($_objColor$obj$_noColor)';
+        _buffer.write('($_objColor$obj$_noColor)');
+        return;
       }
 
-      final StringBuffer out = StringBuffer();
-
       if (obj is Map) {
-        out.write(
+        _buffer.write(
             '$_mapColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
         _level++;
         obj.forEach((key, value) {
-          out.write('  ' * _level);
-          out.write('$_keyColor$key$_noColor: ${dump(value)}\n');
+          _buffer.write('  ' * _level);
+          _buffer.write('$_keyColor$key$_noColor: ');
+          _dump(value);
+          _buffer.write('\n');
         });
-        out.write('  ' * (_level - 1));
-        out.write('}');
+        _buffer.write('  ' * (_level - 1));
+        _buffer.write('}');
         _level--;
-        return out.toString();
+        return;
       }
 
       if (obj is List) {
-        out.write(
+        _buffer.write(
             '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor [\n');
         _level++;
         for (var i = 0; i < obj.length; i++) {
-          out.write('  ' * _level);
-          out.write('$_numberColor$i$_noColor: ${dump(obj[i])}\n');
+          _buffer.write('  ' * _level);
+          _buffer.write('$_numberColor$i$_noColor: ');
+          _dump(obj[i]);
+          _buffer.write('\n');
         }
-        out.write('  ' * (_level - 1));
-        out.write(']');
+        _buffer.write('  ' * (_level - 1));
+        _buffer.write(']');
         _level--;
-        return out.toString();
+        return;
       }
 
       if (obj is Set) {
-        out.write(
+        _buffer.write(
             '$_setColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
         _level++;
         for (var value in obj) {
-          out.write('  ' * _level);
-          out.write('${dump(value)}\n');
+          _buffer.write('  ' * _level);
+          _dump(value);
+          _buffer.write('\n');
         }
-        out.write('  ' * (_level - 1));
-        out.write('}');
+        _buffer.write('  ' * (_level - 1));
+        _buffer.write('}');
         _level--;
-        return out.toString();
+        return;
       }
 
       if (obj is Iterable) {
-        out.write(
+        _buffer.write(
             '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor (\n');
         _level++;
         for (var value in obj) {
-          out.write('  ' * _level);
-          out.write('${dump(value)}\n');
+          _buffer.write('  ' * _level);
+          _dump(value);
+          _buffer.write('\n');
         }
-        out.write('  ' * (_level - 1));
-        out.write(')');
+        _buffer.write('  ' * (_level - 1));
+        _buffer.write(')');
         _level--;
-        return out.toString();
+        return;
       }
 
       if (obj is Object) {
@@ -135,23 +158,26 @@ class Dumper {
         }
 
         if (json != null) {
-          out.write(
+          _buffer.write(
               '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n');
           _level++;
           json.forEach((key, value) {
-            out.write('  ' * _level);
-            out.write('$_keyColor"$key"$_noColor: ${dump(value)}\n');
+            _buffer.write('  ' * _level);
+            _buffer.write('$_keyColor"$key"$_noColor: ');
+            _dump(value);
+            _buffer.write('\n');
           });
-          out.write('  ' * (_level - 1));
-          out.write('}');
+          _buffer.write('  ' * (_level - 1));
+          _buffer.write('}');
           _level--;
-          return out.toString();
+          return;
         } else {
-          return '$_objColor${obj.toString()}$_noColor';
+          _buffer.write('$_objColor${obj.toString()}$_noColor');
+          return;
         }
       }
 
-      return "***${out.toString()}***";
+      _buffer.write("***${obj.toString()}***");
     } finally {
       if (obj != null) {
         _visited.remove(obj);
