@@ -68,6 +68,13 @@ void main() {
       expect(dumper.dump(obj), equals(expected));
     });
 
+    test('should dump an object with an empty toJson method on a single line', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithEmptyToJson();
+      final expected = 'TestClassWithEmptyToJson {}';
+      expect(dumper.dump(obj), equals(expected));
+    });
+
     test('should dump an object without a toJson method', () {
       final dumper = Dumper(colorize: false);
       final obj = _TestClassWithoutToJson(1, 'two');
@@ -128,6 +135,10 @@ class _TestClassWithToJson {
   final String b;
 
   Map<String, dynamic> toJson() => {'a': a, 'b': b};
+}
+
+class _TestClassWithEmptyToJson {
+  Map<String, dynamic> toJson() => {};
 }
 
 class _TestClassWithoutToJson {

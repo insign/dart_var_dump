@@ -48,5 +48,26 @@ void main() {
       final expected = 'MappedListIterable<int, int> (\n  2\n  4\n  6\n)';
       expect(dumper.dump(iterable), equals(expected));
     });
+
+    test('should dump an empty list on a single line', () {
+      final dumper = Dumper(colorize: false);
+      expect(dumper.dump([]), equals('List<dynamic> []'));
+    });
+
+    test('should dump an empty map on a single line', () {
+      final dumper = Dumper(colorize: false);
+      expect(dumper.dump({}), equals('Map<dynamic, dynamic> {}'));
+    });
+
+    test('should dump an empty set on a single line', () {
+      final dumper = Dumper(colorize: false);
+      expect(dumper.dump(<int>{}), equals('Set<int> {}'));
+    });
+
+    test('should dump an empty generic iterable on a single line', () {
+      final dumper = Dumper(colorize: false);
+      final iterable = [].map((e) => e * 2);
+      expect(dumper.dump(iterable), equals('MappedListIterable<dynamic, dynamic> ()'));
+    });
   });
 }
