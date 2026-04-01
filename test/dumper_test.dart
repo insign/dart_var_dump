@@ -48,5 +48,33 @@ void main() {
       final expected = 'MappedListIterable<int, int> (\n  2\n  4\n  6\n)';
       expect(dumper.dump(iterable), equals(expected));
     });
+
+    test('should dump an empty list concisely', () {
+      final dumper = Dumper(colorize: false);
+      final list = <int>[];
+      final expected = 'List<int> []';
+      expect(dumper.dump(list), equals(expected));
+    });
+
+    test('should dump an empty map concisely', () {
+      final dumper = Dumper(colorize: false);
+      final map = <String, int>{};
+      final expected = 'Map<String, int> {}';
+      expect(dumper.dump(map), equals(expected));
+    });
+
+    test('should dump an empty set concisely', () {
+      final dumper = Dumper(colorize: false);
+      final set = <int>{};
+      final expected = 'Set<int> {}';
+      expect(dumper.dump(set), equals(expected));
+    });
+
+    test('should dump an empty iterable concisely', () {
+      final dumper = Dumper(colorize: false);
+      final iterable = <int>[].where((e) => e > 0);
+      final expected = 'WhereIterable<int> ()';
+      expect(dumper.dump(iterable), equals(expected));
+    });
   });
 }

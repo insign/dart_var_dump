@@ -90,6 +90,12 @@ class Dumper {
       }
 
       if (obj is Map) {
+        if (obj.isEmpty) {
+          _buffer.write(
+            '$_mapColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {}',
+          );
+          return;
+        }
         _buffer.write(
           '$_mapColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n',
         );
@@ -107,6 +113,12 @@ class Dumper {
       }
 
       if (obj is List) {
+        if (obj.isEmpty) {
+          _buffer.write(
+            '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor []',
+          );
+          return;
+        }
         _buffer.write(
           '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor [\n',
         );
@@ -124,6 +136,12 @@ class Dumper {
       }
 
       if (obj is Set) {
+        if (obj.isEmpty) {
+          _buffer.write(
+            '$_setColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {}',
+          );
+          return;
+        }
         _buffer.write(
           '$_setColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n',
         );
@@ -140,6 +158,12 @@ class Dumper {
       }
 
       if (obj is Iterable) {
+        if (obj.isEmpty) {
+          _buffer.write(
+            '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor ()',
+          );
+          return;
+        }
         _buffer.write(
           '$_listColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor (\n',
         );
@@ -164,6 +188,12 @@ class Dumper {
         }
 
         if (json != null) {
+          if (json.isEmpty) {
+            _buffer.write(
+              '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {}',
+            );
+            return;
+          }
           _buffer.write(
             '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n',
           );
