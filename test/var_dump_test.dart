@@ -76,6 +76,29 @@ void main() {
     });
   });
 
+  group('custom objects', () {
+    test('should dump an object with a toJson method', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithToJson(1, 'two');
+      final expected = 'TestClassWithToJson {\n  "a": 1\n  "b": "two"\n}';
+      expect(dumper.dump(obj), equals(expected));
+    });
+
+    test('should dump an object without a toJson method', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithoutToJson(1, 'two');
+      final expected = 'Instance of \'_TestClassWithoutToJson\'';
+      expect(dumper.dump(obj), equals(expected));
+    });
+
+    test('should dump an object with an empty toJson method concisely', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithEmptyToJson();
+      final expected = 'TestClassWithEmptyToJson {}';
+      expect(dumper.dump(obj), equals(expected));
+    });
+  });
+
   group('circular references', () {
     test('should handle circular references in lists', () {
       final dumper = Dumper(colorize: false);
@@ -128,6 +151,10 @@ class _TestClassWithToJson {
   final String b;
 
   Map<String, dynamic> toJson() => {'a': a, 'b': b};
+}
+
+class _TestClassWithEmptyToJson {
+  Map<String, dynamic> toJson() => {};
 }
 
 class _TestClassWithoutToJson {
