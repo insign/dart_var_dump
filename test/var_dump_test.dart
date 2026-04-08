@@ -97,6 +97,12 @@ void main() {
       final expected = 'TestClassWithEmptyToJson {}';
       expect(dumper.dump(obj), equals(expected));
     });
+
+    test('should bubble up errors thrown within toJson method', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithThrowingToJson();
+      expect(() => dumper.dump(obj), throwsA(isA<StateError>()));
+    });
   });
 
   group('circular references', () {
@@ -155,6 +161,12 @@ class _TestClassWithToJson {
 
 class _TestClassWithEmptyToJson {
   Map<String, dynamic> toJson() => {};
+}
+
+class _TestClassWithThrowingToJson {
+  Map<String, dynamic> toJson() {
+    throw StateError('Intentional error');
+  }
 }
 
 class _TestClassWithoutToJson {
