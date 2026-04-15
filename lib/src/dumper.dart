@@ -183,7 +183,7 @@ class Dumper {
         Map<String, dynamic>? json;
         try {
           json = (obj as dynamic).toJson();
-        } catch (e) {
+        } on NoSuchMethodError {
           // ignore
         }
 

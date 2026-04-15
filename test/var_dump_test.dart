@@ -97,6 +97,12 @@ void main() {
       final expected = 'TestClassWithEmptyToJson {}';
       expect(dumper.dump(obj), equals(expected));
     });
+
+    test('should throw if toJson throws an exception', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithBuggyToJson();
+      expect(() => dumper.dump(obj), throwsException);
+    });
   });
 
   group('circular references', () {
@@ -162,4 +168,10 @@ class _TestClassWithoutToJson {
 
   final int a;
   final String b;
+}
+
+class _TestClassWithBuggyToJson {
+  Map<String, dynamic> toJson() {
+    throw Exception('Bug in toJson');
+  }
 }
