@@ -103,6 +103,20 @@ void main() {
       final obj = _TestClassWithBuggyToJson();
       expect(() => dumper.dump(obj), throwsException);
     });
+
+    test('should dump an object with a toJson method returning String', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithStringToJson();
+      final expected = 'TestClassWithStringToJson "I am a string"';
+      expect(dumper.dump(obj), equals(expected));
+    });
+
+    test('should dump an object with a toJson method returning int', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithIntToJson();
+      final expected = 'TestClassWithIntToJson 42';
+      expect(dumper.dump(obj), equals(expected));
+    });
   });
 
   group('circular references', () {
@@ -174,4 +188,12 @@ class _TestClassWithBuggyToJson {
   Map<String, dynamic> toJson() {
     throw Exception('Bug in toJson');
   }
+}
+
+class _TestClassWithStringToJson {
+  String toJson() => 'I am a string';
+}
+
+class _TestClassWithIntToJson {
+  int toJson() => 42;
 }
