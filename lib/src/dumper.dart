@@ -180,34 +180,42 @@ class Dumper {
       }
 
       if (obj is Object) {
-        Map<String, dynamic>? json;
+        dynamic json;
+        bool hasToJson = false;
         try {
           json = (obj as dynamic).toJson();
+          hasToJson = true;
         } on NoSuchMethodError {
           // ignore
         }
 
-        if (json != null) {
-          if (json.isEmpty) {
+        if (hasToJson) {
+          if (json is Map) {
+            if (json.isEmpty) {
+              _buffer.write(
+                '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {}',
+              );
+              return;
+            }
             _buffer.write(
-              '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {}',
+              '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n',
             );
+            _level++;
+            json.forEach((key, value) {
+              _buffer.write('  ' * _level);
+              _buffer.write('$_keyColor"$key"$_noColor: ');
+              _dump(value);
+              _buffer.write('\n');
+            });
+            _buffer.write('  ' * (_level - 1));
+            _buffer.write('}');
+            _level--;
+            return;
+          } else {
+            _buffer.write('$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor ');
+            _dump(json);
             return;
           }
-          _buffer.write(
-            '$_objColor${obj.runtimeType.toString().replaceAll('_', '')}$_noColor {\n',
-          );
-          _level++;
-          json.forEach((key, value) {
-            _buffer.write('  ' * _level);
-            _buffer.write('$_keyColor"$key"$_noColor: ');
-            _dump(value);
-            _buffer.write('\n');
-          });
-          _buffer.write('  ' * (_level - 1));
-          _buffer.write('}');
-          _level--;
-          return;
         }
 
         _buffer.write('$_objColor${obj.toString()}$_noColor');
