@@ -104,6 +104,12 @@ void main() {
       expect(() => dumper.dump(obj), throwsException);
     });
 
+    test('should NOT swallow NoSuchMethodError inside toJson', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithBuggyNsmToJson();
+      expect(() => dumper.dump(obj), throwsNoSuchMethodError);
+    });
+
     test('should dump an object with a toJson method returning String', () {
       final dumper = Dumper(colorize: false);
       final obj = _TestClassWithStringToJson();
@@ -187,6 +193,13 @@ class _TestClassWithoutToJson {
 class _TestClassWithBuggyToJson {
   Map<String, dynamic> toJson() {
     throw Exception('Bug in toJson');
+  }
+}
+
+class _TestClassWithBuggyNsmToJson {
+  dynamic value;
+  Map<String, dynamic> toJson() {
+    return {'value': value.someMethod()};
   }
 }
 
