@@ -180,16 +180,15 @@ class Dumper {
       }
 
       if (obj is Object) {
-        dynamic json;
-        bool hasToJson = false;
+        Function? toJsonFunc;
         try {
-          json = (obj as dynamic).toJson();
-          hasToJson = true;
+          toJsonFunc = (obj as dynamic).toJson as Function;
         } on NoSuchMethodError {
           // ignore
         }
 
-        if (hasToJson) {
+        if (toJsonFunc != null) {
+          final json = toJsonFunc();
           if (json is Map) {
             if (json.isEmpty) {
               _buffer.write(
