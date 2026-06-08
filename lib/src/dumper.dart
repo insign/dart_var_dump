@@ -182,7 +182,10 @@ class Dumper {
       if (obj is Object) {
         Function? toJsonFunc;
         try {
-          toJsonFunc = (obj as dynamic).toJson as Function;
+          final dynamic toJsonVal = (obj as dynamic).toJson;
+          if (toJsonVal is Function) {
+            toJsonFunc = toJsonVal;
+          }
         } on NoSuchMethodError {
           // ignore
         }

@@ -123,6 +123,13 @@ void main() {
       final expected = 'TestClassWithIntToJson 42';
       expect(dumper.dump(obj), equals(expected));
     });
+
+    test('should dump an object with a non-function toJson field', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithNonFunctionToJson();
+      final expected = 'Instance of \'_TestClassWithNonFunctionToJson\'';
+      expect(dumper.dump(obj), equals(expected));
+    });
   });
 
   group('circular references', () {
@@ -209,4 +216,8 @@ class _TestClassWithStringToJson {
 
 class _TestClassWithIntToJson {
   int toJson() => 42;
+}
+
+class _TestClassWithNonFunctionToJson {
+  int toJson = 42;
 }
