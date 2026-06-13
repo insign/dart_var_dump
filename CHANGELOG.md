@@ -1,3 +1,7 @@
+## v0.10.1
+- fix: prevent crashes when `toJson` is a non-function field
+- fix: support primitive `toJson()` return values while surfacing real user exceptions
+
 ## v0.9.0
 - perf: Optimize Dumper with cached colors and StringBuffer for better performance
 
