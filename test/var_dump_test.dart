@@ -33,7 +33,7 @@ void main() {
         'c': true,
       };
       final expected =
-          'Map<String, Object> {\n  a: 1\n  b: Map<String, int> {\n    x: 10\n    y: 20\n  }\n  c: true\n}';
+          'Map<String, Object> {\n  "a": 1\n  "b": Map<String, int> {\n    "x": 10\n    "y": 20\n  }\n  "c": true\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
@@ -44,7 +44,7 @@ void main() {
         {'b': 2},
       ];
       final expected =
-          'List<Map<String, int>> [\n  0: Map<String, int> {\n    a: 1\n  }\n  1: Map<String, int> {\n    b: 2\n  }\n]';
+          'List<Map<String, int>> [\n  0: Map<String, int> {\n    "a": 1\n  }\n  1: Map<String, int> {\n    "b": 2\n  }\n]';
       expect(dumper.dump(list), equals(expected));
     });
 
@@ -55,7 +55,7 @@ void main() {
         'b': [4, 5, 6],
       };
       final expected =
-          'Map<String, List<int>> {\n  a: List<int> [\n    0: 1\n    1: 2\n    2: 3\n  ]\n  b: List<int> [\n    0: 4\n    1: 5\n    2: 6\n  ]\n}';
+          'Map<String, List<int>> {\n  "a": List<int> [\n    0: 1\n    1: 2\n    2: 3\n  ]\n  "b": List<int> [\n    0: 4\n    1: 5\n    2: 6\n  ]\n}';
       expect(dumper.dump(map), equals(expected));
     });
   });
@@ -132,6 +132,22 @@ void main() {
     });
   });
 
+  group('key disambiguation', () {
+    test('should disambiguate integer and string keys in Map', () {
+      final dumper = Dumper(colorize: false);
+      final map = {1: 'one', '1': 'two'};
+      final expected = 'Map<Object, String> {\n  1: "one"\n  "1": "two"\n}';
+      expect(dumper.dump(map), equals(expected));
+    });
+
+    test('should unquote non-string keys returned by a toJson method', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithIntKeyToJson();
+      final expected = 'TestClassWithIntKeyToJson {\n  1: "one"\n}';
+      expect(dumper.dump(obj), equals(expected));
+    });
+  });
+
   group('circular references', () {
     test('should handle circular references in lists', () {
       final dumper = Dumper(colorize: false);
@@ -146,7 +162,7 @@ void main() {
       final dumper = Dumper(colorize: false);
       final map = <String, dynamic>{'a': 1, 'b': 2};
       map['c'] = map;
-      final expected = 'Map<String, dynamic> {\n  a: 1\n  b: 2\n  c: *RECURSION*\n}';
+      final expected = 'Map<String, dynamic> {\n  "a": 1\n  "b": 2\n  "c": *RECURSION*\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
@@ -220,4 +236,8 @@ class _TestClassWithIntToJson {
 
 class _TestClassWithNonFunctionToJson {
   int toJson = 42;
+}
+
+class _TestClassWithIntKeyToJson {
+  Map<int, String> toJson() => {1: 'one'};
 }
