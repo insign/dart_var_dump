@@ -33,7 +33,7 @@ void main() {
         'c': true,
       };
       final expected =
-          'Map<String, Object> {\n  a: 1\n  b: Map<String, int> {\n    x: 10\n    y: 20\n  }\n  c: true\n}';
+          'Map<String, Object> {\n  "a": 1\n  "b": Map<String, int> {\n    "x": 10\n    "y": 20\n  }\n  "c": true\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
@@ -44,8 +44,18 @@ void main() {
         {'b': 2},
       ];
       final expected =
-          'List<Map<String, int>> [\n  0: Map<String, int> {\n    a: 1\n  }\n  1: Map<String, int> {\n    b: 2\n  }\n]';
+          'List<Map<String, int>> [\n  0: Map<String, int> {\n    "a": 1\n  }\n  1: Map<String, int> {\n    "b": 2\n  }\n]';
       expect(dumper.dump(list), equals(expected));
+    });
+
+    test('should disambiguate string and int keys in map', () {
+      final dumper = Dumper(colorize: false);
+      final map = {
+        '1': 'string key',
+        1: 'int key',
+      };
+      final expected = 'Map<Object, String> {\n  "1": "string key"\n  1: "int key"\n}';
+      expect(dumper.dump(map), equals(expected));
     });
 
     test('should dump a map of lists', () {
@@ -55,7 +65,7 @@ void main() {
         'b': [4, 5, 6],
       };
       final expected =
-          'Map<String, List<int>> {\n  a: List<int> [\n    0: 1\n    1: 2\n    2: 3\n  ]\n  b: List<int> [\n    0: 4\n    1: 5\n    2: 6\n  ]\n}';
+          'Map<String, List<int>> {\n  "a": List<int> [\n    0: 1\n    1: 2\n    2: 3\n  ]\n  "b": List<int> [\n    0: 4\n    1: 5\n    2: 6\n  ]\n}';
       expect(dumper.dump(map), equals(expected));
     });
   });
@@ -124,6 +134,13 @@ void main() {
       expect(dumper.dump(obj), equals(expected));
     });
 
+    test('should omit quotes for non-string keys in toJson', () {
+      final dumper = Dumper(colorize: false);
+      final obj = _TestClassWithIntKeysToJson();
+      final expected = 'TestClassWithIntKeysToJson {\n  1: "a"\n  2: "b"\n}';
+      expect(dumper.dump(obj), equals(expected));
+    });
+
     test('should not crash if toJson is a non-function field', () {
       final dumper = Dumper(colorize: false);
       final obj = _TestClassWithNonFunctionToJson();
@@ -146,7 +163,7 @@ void main() {
       final dumper = Dumper(colorize: false);
       final map = <String, dynamic>{'a': 1, 'b': 2};
       map['c'] = map;
-      final expected = 'Map<String, dynamic> {\n  a: 1\n  b: 2\n  c: *RECURSION*\n}';
+      final expected = 'Map<String, dynamic> {\n  "a": 1\n  "b": 2\n  "c": *RECURSION*\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
@@ -220,4 +237,8 @@ class _TestClassWithIntToJson {
 
 class _TestClassWithNonFunctionToJson {
   int toJson = 42;
+}
+
+class _TestClassWithIntKeysToJson {
+  Map<int, String> toJson() => {1: 'a', 2: 'b'};
 }
