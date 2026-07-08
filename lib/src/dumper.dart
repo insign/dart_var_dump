@@ -102,7 +102,11 @@ class Dumper {
         _level++;
         obj.forEach((key, value) {
           _buffer.write('  ' * _level);
-          _buffer.write('$_keyColor$key$_noColor: ');
+          if (key is String) {
+            _buffer.write('$_keyColor"$key"$_noColor: ');
+          } else {
+            _buffer.write('$_keyColor$key$_noColor: ');
+          }
           _dump(value);
           _buffer.write('\n');
         });
@@ -205,7 +209,11 @@ class Dumper {
             _level++;
             json.forEach((key, value) {
               _buffer.write('  ' * _level);
-              _buffer.write('$_keyColor"$key"$_noColor: ');
+              if (key is String) {
+                _buffer.write('$_keyColor"$key"$_noColor: ');
+              } else {
+                _buffer.write('$_keyColor$key$_noColor: ');
+              }
               _dump(value);
               _buffer.write('\n');
             });

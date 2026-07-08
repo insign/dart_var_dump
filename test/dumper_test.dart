@@ -38,7 +38,7 @@ void main() {
     test('should dump a map', () {
       final dumper = Dumper(colorize: false);
       final map = {'a': 1, 'b': 'two', 'c': true};
-      final expected = 'Map<String, Object> {\n  a: 1\n  b: "two"\n  c: true\n}';
+      final expected = 'Map<String, Object> {\n  "a": 1\n  "b": "two"\n  "c": true\n}';
       expect(dumper.dump(map), equals(expected));
     });
 
